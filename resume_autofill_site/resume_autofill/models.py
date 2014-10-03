@@ -44,6 +44,7 @@ class Education(models.Model):
 
     class Meta:
         ordering = ['-end_date','-start_date']
+        verbose_name_plural = "Education"
 
     def edu_date_range(self):
         return ''.join(['(', self.formatted_start_date(), 
@@ -71,6 +72,8 @@ class Education(models.Model):
         return ' '.join([self.name, self.edu_date_range()])
 
 class Job(models.Model):
+    resume = models.ForeignKey(Resume)
+
     company = models.CharField(max_length=250)
     company_url = models.URLField('Company URL')
 
@@ -112,17 +115,6 @@ class Job(models.Model):
     def __unicode__(self):
         return ' '.join([self.company, self.job_date_range()])
 
-class SkillUsed(models.Model):
-    job = models.ForeignKey(Job)
-    name =  models.CharField(max_length=250) # C++, Python, Java
-    
-    class Meta:
-        verbose_name_plural = "skills used"
-        ordering = ['id']
-
-    def __unicode__(self):
-        return self.name
-
 class Accomplishment(models.Model):
     job = models.ForeignKey(Job)
     description = models.TextField()
@@ -135,4 +127,14 @@ class Accomplishment(models.Model):
     def __unicode__(self):
         return ''.join([self.job.company, '-', self.description[0:50], '...'])
 
+class SkillUsed(models.Model):
+    job = models.ForeignKey(Job)
+    name =  models.CharField(max_length=250) # C++, Python, Java
+    
+    class Meta:
+        verbose_name_plural = "skills used"
+        ordering = ['id']
+
+    def __unicode__(self):
+        return self.name
 

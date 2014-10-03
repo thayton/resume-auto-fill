@@ -126,6 +126,12 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
+            model_name='job',
+            name='resume',
+            field=models.ForeignKey(to='resume_autofill.Resume'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
             model_name='education',
             name='resume',
             field=models.ForeignKey(to='resume_autofill.Resume'),
