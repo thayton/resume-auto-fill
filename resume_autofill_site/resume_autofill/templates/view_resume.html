@@ -1,0 +1,61 @@
+<center>
+  <h2>{{ resume.user }}</h2>
+  <em>{{ resume.location }}</em>
+</center>
+
+<hr>
+
+<h3>Professional Summary</h3>
+<p>{{ resume.professional_summary }}</p>
+
+<hr>
+<h3>Skills</h3>
+{% for skillset in resume.skillset_set.all %}
+<b>{{ skillset }}</b>
+<ul>
+{% for skill in skillset.skill_set.all %}
+  <li>{{ skill.name }}</li>
+{% endfor %}
+</ul>
+{% endfor %}
+
+<hr>
+<h3>Education</h3>
+<table border=1>
+  <tr>
+    <th>Name</th>
+    <th>Major</th>
+    <th>GPA</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Degree</th>
+  </tr>
+{% for school in resume.education_set.all %}
+  <tr>
+    <td>{{ school.name }}</td>
+    <td>{{ school.major }}</td>
+    <td>{{ school.gpa }}</td>
+    <td>{{ school.start_date }}</td>
+    <td>{{ school.end_date }}</td>
+    <td>{{ school.degree }}</td>
+  </tr>
+{% endfor %}
+</table>
+
+<hr>
+<h3>Experience</h3>
+{% for job in resume.job_set.all %}
+  {{ job.title }}
+  {{ job.company }}
+  <ul>
+  {% for acc in job.accomplishment_set.all %}
+    <li>{{ acc }}</li>
+  {% endfor %}
+  </ul>
+  <ul>
+  {% for skill in job.skillused_set.all %}
+    <li>{{ skill }}</li>
+  {% endfor %}
+  </ul>
+{% endfor %}
+
