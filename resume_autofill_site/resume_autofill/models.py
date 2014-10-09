@@ -3,7 +3,16 @@ import time
 from django.db import models
 from django.contrib.auth.models import User
 
+class Resume(models.Model):
+    user = models.ForeignKey(User)
+    professional_summary = models.TextField()
+    location = models.CharField(max_length=250)
+
+    def __unicode__(self):
+        return self.user.username
+
 class Skillset(models.Model):
+    resume = models.ForeignKey(Resume)
     name = models.CharField(max_length=250) # Operating Systems, Languages, SCM
 
     def __unicode__(self):
@@ -19,12 +28,6 @@ class Skill(models.Model):
     def __unicode__(self):
         return ''.join([self.skillset.name, '-', self.name])
 
-class Resume(models.Model):
-    user = models.ForeignKey(User)
-    professional_summary = models.TextField()
-    skillset = models.ForeignKey(Skillset)
-    location = models.CharField(max_length=250)
-
 class Education(models.Model):
     resume = models.ForeignKey(Resume)
 
@@ -32,15 +35,16 @@ class Education(models.Model):
     location = models.CharField(max_length=250)
     school_url = models.URLField('School URL')
 
+    # major= models.CharField(max_length=250)
     degree = models.CharField(max_length=250) # BS, MS, PHD
 
     start_date = models.DateField()
     end_date = models.DateField()
 
-    summary = models.TextField()
+    summary = models.TextField(blank=True)
     is_current = models.BooleanField(default=False)
 
-    gpa = models.DecimalField(max_digits=3, decimal_places=2)
+    gpa = models.DecimalField(max_digits=3, decimal_places=2, blank=True, null=True)
 
     class Meta:
         ordering = ['-end_date','-start_date']
