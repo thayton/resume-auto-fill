@@ -1,0 +1,8 @@
+{% for skillset in skillsets %}
+<h4>{{ skillset.name }}</h4>
+  <ul>
+  {% for skill in skillset.skills.all %}
+    <li>{{ skill.name }}</li>  
+  {% endfor %}
+  </ul>
+{% endfor %}

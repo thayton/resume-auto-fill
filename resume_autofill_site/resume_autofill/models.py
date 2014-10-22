@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Resume(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, related_name='resumes')
     professional_summary = models.TextField()
     location = models.CharField(max_length=250)
 
@@ -12,14 +12,14 @@ class Resume(models.Model):
         return self.user.username
 
 class Skillset(models.Model):
-    resume = models.ForeignKey(Resume)
+    resume = models.ForeignKey(Resume, related_name='skillsets')
     name = models.CharField(max_length=250) # Operating Systems, Languages, SCM
 
     def __unicode__(self):
         return self.name
 
 class Skill(models.Model):
-    skillset = models.ForeignKey(Skillset)
+    skillset = models.ForeignKey(Skillset, related_name='skills')
     name =  models.CharField(max_length=250) # C++, Python, Java
     
     class Meta:
@@ -76,7 +76,7 @@ class Education(models.Model):
         return ' '.join([self.name, self.edu_date_range()])
 
 class Job(models.Model):
-    resume = models.ForeignKey(Resume)
+    resume = models.ForeignKey(Resume, related_name='jobs')
 
     company = models.CharField(max_length=250)
     company_url = models.URLField('Company URL')
@@ -120,7 +120,7 @@ class Job(models.Model):
         return ' '.join([self.company, self.job_date_range()])
 
 class Accomplishment(models.Model):
-    job = models.ForeignKey(Job)
+    job = models.ForeignKey(Job, related_name='accomplishments')
     description = models.TextField()
 
     order = models.IntegerField()
@@ -132,7 +132,7 @@ class Accomplishment(models.Model):
         return ''.join([self.job.company, '-', self.description[0:50], '...'])
 
 class SkillUsed(models.Model):
-    job = models.ForeignKey(Job)
+    job = models.ForeignKey(Job, related_name='skills_used')
     name =  models.CharField(max_length=250) # C++, Python, Java
     
     class Meta:
