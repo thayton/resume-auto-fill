@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
-from resume_autofill.models import Resume, Skillset
-from resume_autofill.forms import SkillsetForm, SkillInlineFormSet
+from resume_autofill.models import Resume, Skillset, Job, Education
+from resume_autofill.forms import SkillsetForm, SkillInlineFormSet, JobForm, AccomplishmentInlineFormSet, EducationForm
 
 def index(request):
     return HttpResponse("Hello, world. You're at the resume_autofill index.")
@@ -13,7 +13,8 @@ def view_resume(request):
     context = {'resume': resume}
     return render(request, 'view_resume.html', context)
 
-def view_resume_skillset(request):
+#----------------------------------------
+def view_skillsets(request):
     ''' Return a list of skillsets that have been added for this resume '''
     resume = request.user.resumes.all()[0]
     skillsets = resume.skillsets.all()
@@ -23,11 +24,11 @@ def view_resume_skillset(request):
 
     return render_to_response("view_skillsets.html", reqc)
 
-def add_resume_skillset(request):
+def add_skillset(request):
     ''' Create and add a new skillset '''
     return HttpResponse("You're editing your resume.")
     
-def edit_resume_skillset(request, skillset_id):
+def edit_skillset(request, skillset_id):
     ''' Change an existing skillset '''
 
     # Get the skillset associated with id
@@ -44,7 +45,7 @@ def edit_resume_skillset(request, skillset_id):
             if skill_inlineformset.is_valid():
                 skillset.save()
                 skill_inlineformset.save()                
-                return HttpResponseRedirect(reverse('view_resume_skillset'))
+                return HttpResponseRedirect(reverse('view_skillset'))
 
     # GET: Show form for existing skillset so user can submit updates
     else:
@@ -55,4 +56,86 @@ def edit_resume_skillset(request, skillset_id):
     reqc = RequestContext(request, vars)
 
     return render_to_response("edit_skillset.html", reqc)
+
+#----------------------------------------
+def view_jobs(request):
+    ''' Return a list of jobs that have been added for this resume '''
+    resume = request.user.resumes.all()[0]
+    jobs = resume.jobs.all()
+
+    vars = {'jobs': jobs}
+    reqc = RequestContext(request, vars)
+
+    return render_to_response("view_jobs.html", reqc)
+
+def add_job(request):
+    ''' Create and add a new job '''
+    return HttpResponse("You're editing your resume.")
+    
+def edit_job(request, job_id):
+    ''' Change an existing job '''
+
+    # Get the job associated with id
+    job = get_object_or_404(Job, pk=job_id)
+
+    # POST: User has submitted updates to change job
+    if request.POST:
+        form = JobForm(request.POST, instance=job)
+
+        if form.is_valid():
+            form.save(commit=False) # Why commit=False?
+            accomplishment_inlineformset = AccomplishmentInlineFormSet(request.POST, instance=job)
+
+            if accomplishment_inlineformset.is_valid():
+                job.save()
+                accomplishment_inlineformset.save()                
+                return HttpResponseRedirect(reverse('view_jobs'))
+
+    # GET: Show form for existing job so user can submit updates
+    else:
+        form = JobForm(instance=job)
+        accomplishment_inlineformset = AccomplishmentInlineFormSet(instance=job)
+
+    vars = {'form': form, 'accomplishment_inlineformset': accomplishment_inlineformset}
+    reqc = RequestContext(request, vars)
+
+    return render_to_response("edit_job.html", reqc)
+
+#----------------------------------------
+def view_education(request):
+    ''' Return a list of jobs that have been added for this resume '''
+    resume = request.user.resumes.all()[0]
+    education = resume.education.all()
+
+    vars = {'education': education}
+    reqc = RequestContext(request, vars)
+
+    return render_to_response("view_education.html", reqc)
+
+def add_education(request):
+    ''' Create and add a new education '''
+    return HttpResponse("You're editing your resume.")
+    
+def edit_education(request, education_id):
+    ''' Change an existing education '''
+
+    # Get the education associated with id
+    education = get_object_or_404(Education, pk=education_id)
+
+    # POST: User has submitted updates to change education
+    if request.POST:
+        form = EducationForm(request.POST, instance=education)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('view_educations'))
+
+    # GET: Show form for existing education so user can submit updates
+    else:
+        form = EducationForm(instance=education)
+
+    vars = {'form': form}
+    reqc = RequestContext(request, vars)
+
+    return render_to_response("edit_education.html", reqc)
 

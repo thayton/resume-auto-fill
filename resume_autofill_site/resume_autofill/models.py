@@ -28,15 +28,28 @@ class Skill(models.Model):
     def __unicode__(self):
         return ''.join([self.skillset.name, '-', self.name])
 
+# XXX Change model name to School
 class Education(models.Model):
-    resume = models.ForeignKey(Resume)
+    DEGREE_CHOICES = (
+        ('NA', 'N/A'), 
+        ('AS','Associates'),
+        ('BA','Bachelors'),
+        ('MA','Masters'),
+        ('DO','Doctorate'),
+        ('JD','JD'),
+        ('MD','MD'),
+        ('OT','Other'),
+    )
+
+    resume = models.ForeignKey(Resume, related_name='education')
 
     name = models.CharField(max_length=250)
     location = models.CharField(max_length=250)
     school_url = models.URLField('School URL')
 
+    # graduated = models.BooleanField(default=False)
     # major= models.CharField(max_length=250)
-    degree = models.CharField(max_length=250) # BS, MS, PHD
+    degree = models.CharField(max_length=250, choices=DEGREE_CHOICES) 
 
     start_date = models.DateField()
     end_date = models.DateField()

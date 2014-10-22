@@ -1,0 +1,9 @@
+{% for job in jobs %}
+<h4>{{ job.title }}</h4>
+<h5>{{ job.company }}</h5>
+  <ul>
+  {% for acc in job.accomplishments.all %}
+    <li>{{ acc.description }}</li>  
+  {% endfor %}
+  </ul>
+{% endfor %}
