@@ -13,14 +13,14 @@ class Resume(models.Model):
 
 class Skillset(models.Model):
     resume = models.ForeignKey(Resume, related_name='skillsets')
-    name = models.CharField(max_length=250) # Operating Systems, Languages, SCM
+    name = models.CharField(max_length=250, verbose_name='Skillset Name') # Operating Systems, Languages, SCM
 
     def __unicode__(self):
         return self.name
 
 class Skill(models.Model):
     skillset = models.ForeignKey(Skillset, related_name='skills')
-    name =  models.CharField(max_length=250) # C++, Python, Java
+    name =  models.CharField(max_length=250, verbose_name='Skill') # C++, Python, Java
     
     class Meta:
         ordering = ['id']

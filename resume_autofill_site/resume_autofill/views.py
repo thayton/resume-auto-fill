@@ -31,7 +31,30 @@ def view_skillsets(request):
 
 def add_skillset(request):
     ''' Create and add a new skillset '''
-    return HttpResponse("You're editing your resume.")
+    if request.POST:
+        form = SkillsetForm(request.POST)
+        resume = request.user.resumes.all()[0]
+
+        if form.is_valid():
+            skillset = form.save(commit=False) # Why commit=False?
+            skillset.resume = resume
+
+            skill_inlineformset = SkillInlineFormSet(request.POST, instance=skillset)
+
+            if skill_inlineformset.is_valid():
+                skillset.save()
+                skill_inlineformset.save()                
+                return HttpResponseRedirect(reverse('view_skillsets'))
+
+    # GET: Show form for existing skillset so user can submit updates
+    else:
+        form = SkillsetForm()
+        skill_inlineformset = SkillInlineFormSet(instance=Skillset())
+
+    vars = {'form': form, 'skill_inlineformset': skill_inlineformset}
+    reqc = RequestContext(request, vars)
+
+    return render_to_response("add_skillset.html", reqc)
     
 def edit_skillset(request, skillset_id):
     ''' Change an existing skillset '''
