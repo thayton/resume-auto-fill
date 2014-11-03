@@ -4,6 +4,7 @@ from resume_autofill import views
 
 urlpatterns = patterns('',
     url(r'^$',             views.index,       name='index'),
+    url(r'^resume/$',      views.edit_resume, name='edit_resume'),
     url(r'^resume/view/$', views.view_resume, name='view_resume'),
 
     url(r'^resume/skillset/$', views.view_skillsets, name='view_skillsets'),
@@ -14,7 +15,7 @@ urlpatterns = patterns('',
     url(r'^resume/education/(?P<education_id>\d+)/$', views.edit_education, name='edit_education'),
     url(r'^resume/education/add/$', views.add_education, name='add_education'),
 
-    url(r'^resume/job/$', views.view_jobs, name='view_job'),
+    url(r'^resume/job/$', views.view_jobs, name='view_jobs'),
     url(r'^resume/job/(?P<job_id>\d+)/$', views.edit_job, name='edit_job'),
     url(r'^resume/job/add/$', views.add_job, name='add_job'),
 )

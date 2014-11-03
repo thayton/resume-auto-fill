@@ -13,6 +13,11 @@ def view_resume(request):
     context = {'resume': resume}
     return render(request, 'view_resume.html', context)
 
+def edit_resume(request):
+    resume = Resume.objects.all()[0]
+    context = {'resume': resume}
+    return render(request, 'edit_resume.html', context)
+
 #----------------------------------------
 def view_skillsets(request):
     ''' Return a list of skillsets that have been added for this resume '''
@@ -45,7 +50,7 @@ def edit_skillset(request, skillset_id):
             if skill_inlineformset.is_valid():
                 skillset.save()
                 skill_inlineformset.save()                
-                return HttpResponseRedirect(reverse('view_skillset'))
+                return HttpResponseRedirect(reverse('view_skillsets'))
 
     # GET: Show form for existing skillset so user can submit updates
     else:
