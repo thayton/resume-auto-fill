@@ -2,4 +2,9 @@
   {% csrf_token %}
   <table>
     {{ form.as_table }}
+    <tr>
+      <th></th>
+      <td><input type="submit" name="submit" value="Submit" class="button"></td>
+    </tr>
+  </table>
 </form>

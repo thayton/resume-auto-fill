@@ -10,7 +10,7 @@
 
 <hr>
 <h3>Skills</h3>
-{% for skillset in resume.skillset.all %}
+{% for skillset in resume.skillsets.all %}
 <b>{{ skillset }}</b>
 <ul>
 {% for skill in skillset.skills.all %}
@@ -30,7 +30,7 @@
     <th>End Date</th>
     <th>Degree</th>
   </tr>
-{% for school in resume.education_set.all %}
+{% for school in resume.education.all %}
   <tr>
     <td>{{ school.name }}</td>
     <td>{{ school.major }}</td>
